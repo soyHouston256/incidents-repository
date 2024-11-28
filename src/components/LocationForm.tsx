@@ -1,13 +1,29 @@
 import { useState } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from './ui/button';
+import { DatePickerReport } from './DatePicker';
 
 const LocationForm = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
+  const [selectedBusinessKind, setSelectedBusinessKind] = useState('');
 
   // Sample data - replace with your actual data
+  const businessKind = [
+    "Restaurante",
+    "Hotel",
+    "Tienda",
+    "Consultorio",
+    "Oficina",
+    "Otro"
+  ];
+  const genders = [
+      "masculino",
+      "femenino"
+    ]
   const locations = {
   'Amazonas': {
     'Chachapoyas': ['Chachapoyas', 'Asunción', 'Balsas', 'Cheto', 'Chiliquín', 
@@ -220,8 +236,8 @@ const LocationForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-xl font-bold">Ubicación</CardHeader>
+    <Card className="w-full max-w-md mx-auto justify-center">
+      <CardHeader className="text-xl font-bold">Formulario de Reporte</CardHeader>
       <CardContent className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-2">Departamento</label>
@@ -280,8 +296,58 @@ const LocationForm = () => {
             </SelectContent>
           </Select>
         </div>
-
         
+        <div>
+          <label className="block text-sm font-medium mb-2">Genero</label>
+          <Select 
+            onValueChange={setSelectedGender}
+            value={selectedGender}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Seleccione Genero" />
+            </SelectTrigger>
+            <SelectContent>
+              {genders.map((gender) => (
+                <SelectItem key={gender} value={gender}>
+                  {gender}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Tipo de Negocio</label>
+          <Select 
+            onValueChange={setSelectedBusinessKind}
+            value={selectedBusinessKind}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Seleccione tipo de negocio" />
+            </SelectTrigger>
+            <SelectContent>
+              {businessKind.map((kind) => (
+                <SelectItem key={kind} value={kind}>
+                  {kind}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Explique brevemente la amenaza</label>
+          <textarea 
+            className="w-full min-h-[100px] rounded-md border border-gray-300 p-2" 
+            placeholder="Me mandaron una granada"
+          />
+        </div>
+        <div className='flex justify-center'>
+          <DatePickerReport/>
+        </div>
+        <div className='flex justify-center'>
+          <Button>Reportar</Button>
+        </div>
       </CardContent>
     </Card>
   );
