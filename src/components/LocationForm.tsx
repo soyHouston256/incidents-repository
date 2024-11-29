@@ -10,6 +10,8 @@ const LocationForm = () => {
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedBusinessKind, setSelectedBusinessKind] = useState('');
+  const [threatDescription, setThreatDescription] = useState('');
+
 
   // Sample data - replace with your actual data
   const businessKind = [
@@ -35,6 +37,40 @@ const LocationForm = () => {
     setSelectedProvince(value);
     setSelectedDistrict('');
   };
+
+
+  const handleSubmit = async () => {
+    const formData = {
+      department: selectedDepartment,
+      province: selectedProvince,
+      district: selectedDistrict,
+      gender: selectedGender,
+      businessKind: selectedBusinessKind,
+      threatDescription: threatDescription,
+    };
+
+    console.log(formData)
+
+    try {
+      const response = await fetch('http://localhost:3000/answer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Reporte enviado con éxito');
+      } else {
+        alert('Hubo un error al enviar el reporte');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('No se pudo enviar el reporte');
+    }
+  };
+  
 
   return (
     <Card className="w-full max-w-md mx-auto justify-center">
@@ -141,13 +177,15 @@ const LocationForm = () => {
           <textarea 
             className="w-full min-h-[100px] rounded-md border border-gray-300 p-2" 
             placeholder="Me mandaron una granada"
+            value={threatDescription}
+            onChange={(e) => setThreatDescription(e.target.value)}
           />
         </div>
         <div className='flex justify-center'>
           <DatePickerReport/>
         </div>
         <div className='flex justify-center'>
-          <Button>Reportar</Button>
+          <Button onClick={handleSubmit}>Reportar</Button>
         </div>
       </CardContent>
     </Card>
