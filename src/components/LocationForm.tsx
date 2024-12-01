@@ -4,13 +4,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from './ui/button';
 import { DatePickerReport } from './DatePicker';
 import { locations } from '../lib/locations';
+//import { toast } from "@/components/ui/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 const LocationForm = () => {
+  //const { toast } = useToast();
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedBusinessKind, setSelectedBusinessKind] = useState('');
-  const [threatDescription, setThreatDescription] = useState('');
+  const [selectExplain, setExplain] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
 
   // Sample data - replace with your actual data
@@ -38,15 +42,19 @@ const LocationForm = () => {
     setSelectedDistrict('');
   };
 
-
   const handleSubmit = async () => {
+    if (!selectedDepartment || !selectedProvince || !selectedDistrict || !selectedGender || !selectedBusinessKind || !selectedDate) {
+      alert("Rellena los campos")
+    }
+
     const formData = {
-      department: selectedDepartment,
+      region: selectedDepartment,
       province: selectedProvince,
       district: selectedDistrict,
       gender: selectedGender,
-      businessKind: selectedBusinessKind,
-      threatDescription: threatDescription,
+      kindBussines: selectedBusinessKind,
+      explain: selectExplain,
+      date: selectedDate
     };
 
     console.log(formData)
@@ -62,6 +70,14 @@ const LocationForm = () => {
 
       if (response.ok) {
         alert('Reporte enviado con éxito');
+        // Resetear todos los campos
+        setSelectedDepartment('');
+        setSelectedProvince('');
+        setSelectedDistrict('');
+        setSelectedGender('');
+        setSelectedBusinessKind('');
+        setExplain('');
+        setSelectedDate(null);
       } else {
         alert('Hubo un error al enviar el reporte');
       }
@@ -77,7 +93,7 @@ const LocationForm = () => {
       <CardHeader className="text-xl font-bold">Formulario de Reporte</CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Departamento</label>
+          <label className="block text-sm font-medium mb-2">Departamento<span className="text-red-500">*</span></label>
           <Select onValueChange={handleDepartmentChange} value={selectedDepartment}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Seleccione departamento" />
@@ -93,7 +109,7 @@ const LocationForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Provincia</label>
+          <label className="block text-sm font-medium mb-2">Provincia<span className="text-red-500">*</span></label>
           <Select 
             onValueChange={handleProvinceChange} 
             value={selectedProvince}
@@ -114,7 +130,7 @@ const LocationForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Distrito</label>
+          <label className="block text-sm font-medium mb-2">Distrito<span className="text-red-500">*</span></label>
           <Select 
             onValueChange={setSelectedDistrict}
             value={selectedDistrict}
@@ -135,7 +151,7 @@ const LocationForm = () => {
         </div>
         
         <div>
-          <label className="block text-sm font-medium mb-2">Genero</label>
+          <label className="block text-sm font-medium mb-2">Genero<span className="text-red-500">*</span></label>
           <Select 
             onValueChange={setSelectedGender}
             value={selectedGender}
@@ -154,7 +170,7 @@ const LocationForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Tipo de Negocio</label>
+          <label className="block text-sm font-medium mb-2">Tipo de Negocio<span className="text-red-500">*</span></label>
           <Select 
             onValueChange={setSelectedBusinessKind}
             value={selectedBusinessKind}
@@ -177,13 +193,15 @@ const LocationForm = () => {
           <textarea 
             className="w-full min-h-[100px] rounded-md border border-gray-300 p-2" 
             placeholder="Me mandaron una granada"
-            value={threatDescription}
-            onChange={(e) => setThreatDescription(e.target.value)}
+            value={selectExplain}
+            onChange={(e) => setExplain(e.target.value)}
           />
         </div>
+
         <div className='flex justify-center'>
-          <DatePickerReport/>
+          <DatePickerReport onDateChange={setSelectedDate} value={selectedDate}/>
         </div>
+
         <div className='flex justify-center'>
           <Button onClick={handleSubmit}>Reportar</Button>
         </div>

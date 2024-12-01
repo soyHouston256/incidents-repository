@@ -13,8 +13,24 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function DatePickerReport() {
-  const [date, setDate] = React.useState<Date>()
+export function DatePickerReport({ 
+  onDateChange,
+  value 
+}: {
+  onDateChange: (date: Date | null) => void;
+  value: Date | null;
+}) {
+  const [date, setDate] = React.useState<Date | null>(value);
+
+  React.useEffect(() => {
+    setDate(value);
+  }, [value]);
+
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+    onDateChange?.(newDate);
+  };
+
 
   return (
     <Popover>
@@ -27,15 +43,15 @@ export function DatePickerReport() {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Cuando Inicio</span>}
+          {date ? format(date, "PPP") : <span>Cuando Inicio <span className="text-red-500">*</span></span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
           lang="ES"
-          selected={date}
-          onSelect={setDate}
+          selected={date as Date}
+          onSelect={handleDateChange}
           initialFocus
         />
       </PopoverContent>
