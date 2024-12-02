@@ -4,20 +4,43 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from './ui/button';
 import { DatePickerReport } from './DatePicker';
 import { locations } from '../lib/locations';
-//import { toast } from "@/components/ui/use-toast"
-import { Toaster } from "@/components/ui/toaster"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from './ui/toaster';
+
+// interface Locations {
+//   [department: string]: {
+//     [province: string]: string[]
+//   }
+// }
+interface Locations {
+  [department: string]: {
+    [province: string]: string[];
+  }
+}
+
+const typedLocations: Locations = locations;
+
+interface FormData {
+  region: string
+  province: string
+  district: string
+  gender: string
+  kindBussines: string
+  explain: string
+  date: Date | null
+}
+
 const LocationForm = () => {
-  //const { toast } = useToast();
+  const { toast } = useToast();
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedBusinessKind, setSelectedBusinessKind] = useState('');
   const [selectExplain, setExplain] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
 
-  // Sample data - replace with your actual data
   const businessKind = [
     "Restaurante",
     "Hotel",
@@ -30,24 +53,42 @@ const LocationForm = () => {
       "masculino",
       "femenino"
   ]
-  
-  const handleDepartmentChange = (value) => {
+  const handleDepartmentChange = (value: string) => {
     setSelectedDepartment(value);
     setSelectedProvince('');
     setSelectedDistrict('');
   };
-
-  const handleProvinceChange = (value) => {
+  const handleProvinceChange = (value: string) => {
     setSelectedProvince(value);
     setSelectedDistrict('');
   };
-
+  
   const handleSubmit = async () => {
-    if (!selectedDepartment || !selectedProvince || !selectedDistrict || !selectedGender || !selectedBusinessKind || !selectedDate) {
-      alert("Rellena los campos")
-    }
-
-    const formData = {
+	const validateFields = () => {
+      if (!selectedDepartment || !selectedProvince || !selectedDistrict || !selectedGender || !selectedBusinessKind || !selectedDate) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Complete todos los campos obligatorios"
+        });
+        return false;
+      }
+      return true;
+    };
+   
+    const resetForm = () => {
+      setSelectedDepartment('');
+      setSelectedProvince('');
+      setSelectedDistrict('');
+      setSelectedGender('');
+      setSelectedBusinessKind('');
+      setExplain('');
+      setSelectedDate(null);
+    };
+   
+    if (!validateFields()) return;
+   
+    const formData: FormData = {
       region: selectedDepartment,
       province: selectedProvince,
       district: selectedDistrict,
@@ -56,37 +97,24 @@ const LocationForm = () => {
       explain: selectExplain,
       date: selectedDate
     };
-
-    console.log(formData)
-
+   
     try {
       const response = await fetch('http://localhost:3000/answer', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
+   
       if (response.ok) {
-        alert('Reporte enviado con éxito');
-        // Resetear todos los campos
-        setSelectedDepartment('');
-        setSelectedProvince('');
-        setSelectedDistrict('');
-        setSelectedGender('');
-        setSelectedBusinessKind('');
-        setExplain('');
-        setSelectedDate(null);
+        toast({ title: "Éxito", description: "Reporte enviado correctamente", className: "bg-green-500 text-white"  });
+        resetForm();
       } else {
-        alert('Hubo un error al enviar el reporte');
+        toast({ variant: "destructive", title: "Error", description: "Error al enviar el reporte" });
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('No se pudo enviar el reporte');
+      toast({ variant: "destructive", title: "Error", description: "No se pudo enviar el reporte" });
     }
   };
-  
 
   return (
     <Card className="w-full max-w-md mx-auto justify-center">
@@ -119,8 +147,8 @@ const LocationForm = () => {
               <SelectValue placeholder="Seleccione provincia" />
             </SelectTrigger>
             <SelectContent>
-              {selectedDepartment && 
-                Object.keys(locations[selectedDepartment]).map((province) => (
+                {selectedDepartment && locations[selectedDepartment as keyof typeof locations] && 
+                Object.keys(locations[selectedDepartment as keyof typeof locations]).map((province) => (
                   <SelectItem key={province} value={province}>
                     {province}
                   </SelectItem>
@@ -140,12 +168,15 @@ const LocationForm = () => {
               <SelectValue placeholder="Seleccione distrito" />
             </SelectTrigger>
             <SelectContent>
-              {selectedDepartment && selectedProvince &&
-                locations[selectedDepartment][selectedProvince].map((district) => (
+
+              {selectedDepartment && selectedProvince && 
+                typedLocations[selectedDepartment][selectedProvince]?.map((district) => (
                   <SelectItem key={district} value={district}>
                     {district}
                   </SelectItem>
-                ))}
+                ))
+              }
+
             </SelectContent>
           </Select>
         </div>
@@ -206,6 +237,7 @@ const LocationForm = () => {
           <Button onClick={handleSubmit}>Reportar</Button>
         </div>
       </CardContent>
+      <Toaster /> 
     </Card>
   );
 };

@@ -13,11 +13,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function DatePickerReport({ 
+export function DatePickerReport({
   onDateChange,
-  value 
+  value
 }: {
-  onDateChange: (date: Date | null) => void;
+  onDateChange: React.Dispatch<React.SetStateAction<Date | null>>;
   value: Date | null;
 }) {
   const [date, setDate] = React.useState<Date | null>(value);
@@ -26,11 +26,15 @@ export function DatePickerReport({
     setDate(value);
   }, [value]);
 
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-    onDateChange?.(newDate);
-  };
+  // const handleDateChange = (newDate: Date | null) => {
+  //   setDate(newDate);
+  //   onDateChange?.(newDate);
+  // };
 
+  const handleDateChange = (newDate: Date | undefined) => {
+    setDate(newDate || null);
+    onDateChange?.(newDate || null);
+  };
 
   return (
     <Popover>
