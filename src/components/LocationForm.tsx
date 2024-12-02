@@ -116,7 +116,7 @@ const LocationForm = () => {
         body: JSON.stringify(formData),
       });
    
-      if (response.ok) {
+      if (response.status === 201) {
         toast({ title: "Éxito", description: "Reporte enviado correctamente", className: "bg-green-500 text-white"  });
         resetForm();
       } else {
