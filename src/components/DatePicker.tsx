@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { es } from 'date-fns/locale'
 
 export function DatePickerReport({
   onDateChange,
@@ -25,11 +26,6 @@ export function DatePickerReport({
   React.useEffect(() => {
     setDate(value);
   }, [value]);
-
-  // const handleDateChange = (newDate: Date | null) => {
-  //   setDate(newDate);
-  //   onDateChange?.(newDate);
-  // };
 
   const handleDateChange = (newDate: Date | undefined) => {
     setDate(newDate || null);
@@ -47,13 +43,15 @@ export function DatePickerReport({
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Cuando Inicio <span className="text-red-500">*</span></span>}
+
+          {date ? format(date, "PPP", { locale: es }) : <span>Cuando Inicio <span className="text-red-500">*</span></span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
           lang="ES"
+          locale={es}
           selected={date as Date}
           onSelect={handleDateChange}
           initialFocus

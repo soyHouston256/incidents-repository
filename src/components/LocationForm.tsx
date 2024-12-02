@@ -42,16 +42,27 @@ const LocationForm = () => {
 
 
   const businessKind = [
+    "Bodega",
     "Restaurante",
-    "Hotel",
-    "Tienda",
+    "Farmacia", 
+    "Peluquería",
+    "Chifa",
+    "Cevicheria",
+    "Ferretería",
     "Consultorio",
-    "Oficina",
+    "Taller",
+    "Panadería",
+    "Sangucheria",
+    "Restobar",
+    "Veterinaria",
+    "Librería",
+    "Gimnasio",
     "Otro"
-  ];
+   ];
+  
   const genders = [
-      "masculino",
-      "femenino"
+      "Varon",
+      "Mujer"
   ]
   const handleDepartmentChange = (value: string) => {
     setSelectedDepartment(value);
