@@ -110,7 +110,7 @@ const LocationForm = () => {
     };
    
     try {
-      const response = await fetch('http://api.alertape.org/answer', {
+      const response = await fetch('https://api.alertape.org/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
