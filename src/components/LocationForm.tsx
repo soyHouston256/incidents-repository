@@ -115,14 +115,15 @@ const LocationForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-      console.log(response)
-      if (response.status === 201) {
+      console.log("Response",response)
+      if (response.status === 201 || response.status === 204) {
         toast({ title: "Éxito", description: "Reporte enviado correctamente", className: "bg-green-500 text-white"  });
         resetForm();
       } else {
         toast({ variant: "destructive", title: "Error", description: "Error al enviar el reporte" });
       }
     } catch (error) {
+      console.log("Nos fuimos al catch")
       toast({ variant: "destructive", title: "Error", description: "No se pudo enviar el reporte" });
     }
   };
