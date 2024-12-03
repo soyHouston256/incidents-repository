@@ -28,6 +28,7 @@ interface FormData {
   kindBussines: string
   explain: string
   date: Date | null
+  report: string
 }
 
 const LocationForm = () => {
@@ -39,6 +40,7 @@ const LocationForm = () => {
   const [selectedBusinessKind, setSelectedBusinessKind] = useState('');
   const [selectExplain, setExplain] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedReportedToPolice, setReportedToPolice] = useState('');
 
 
   const businessKind = [
@@ -76,7 +78,7 @@ const LocationForm = () => {
   
   const handleSubmit = async () => {
 	const validateFields = () => {
-      if (!selectedDepartment || !selectedProvince || !selectedDistrict || !selectedGender || !selectedBusinessKind || !selectedDate) {
+      if (!selectedDepartment || !selectedProvince || !selectedDistrict || !selectedGender || !selectedBusinessKind || !selectedDate || !selectedReportedToPolice) {
         toast({
           variant: "destructive",
           title: "Error",
@@ -95,6 +97,7 @@ const LocationForm = () => {
       setSelectedBusinessKind('');
       setExplain('');
       setSelectedDate(null);
+      setReportedToPolice('');
     };
    
     if (!validateFields()) return;
@@ -106,7 +109,8 @@ const LocationForm = () => {
       gender: selectedGender,
       kindBussines: selectedBusinessKind,
       explain: selectExplain,
-      date: selectedDate
+      date: selectedDate,
+      report: selectedReportedToPolice,
     };
    
     try {
@@ -243,6 +247,19 @@ const LocationForm = () => {
 
         <div className='flex justify-center'>
           <DatePickerReport onDateChange={setSelectedDate} value={selectedDate}/>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">¿Denunció a la policía?<span className="text-red-500">*</span></label>
+          <Select onValueChange={setReportedToPolice} value={selectedReportedToPolice}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Seleccione" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="si">Sí</SelectItem>
+              <SelectItem value="no">No</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className='flex justify-center'>
