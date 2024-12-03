@@ -130,7 +130,7 @@ const LocationForm = () => {
 
   return (
     <Card className="w-full max-w-md mx-auto justify-center">
-      <CardHeader className="text-xl font-bold">Formulario de Reporte</CardHeader>
+      <CardHeader className="text-xl font-bold">Registro de Seguridad Comunitaria</CardHeader>
       <CardContent className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-2">Departamento<span className="text-red-500">*</span></label>
