@@ -63,7 +63,7 @@ const LocationForm = () => {
    ];
   
   const genders = [
-      "Varon",
+      "Varón",
       "Mujer"
   ]
   const handleDepartmentChange = (value: string) => {
@@ -140,7 +140,7 @@ const LocationForm = () => {
           <label className="block text-sm font-medium mb-2">Departamento<span className="text-red-500">*</span></label>
           <Select onValueChange={handleDepartmentChange} value={selectedDepartment}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccione departamento" />
+              <SelectValue placeholder="Seleccione Departamento" />
             </SelectTrigger>
             <SelectContent>
               {Object.keys(locations).map((department) => (
@@ -160,7 +160,7 @@ const LocationForm = () => {
             disabled={!selectedDepartment}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccione provincia" />
+              <SelectValue placeholder="Seleccione Provincia" />
             </SelectTrigger>
             <SelectContent>
                 {selectedDepartment && locations[selectedDepartment as keyof typeof locations] && 
@@ -181,7 +181,7 @@ const LocationForm = () => {
             disabled={!selectedProvince}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccione distrito" />
+              <SelectValue placeholder="Seleccione Distrito" />
             </SelectTrigger>
             <SelectContent>
 
@@ -223,7 +223,7 @@ const LocationForm = () => {
             value={selectedBusinessKind}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccione tipo de negocio" />
+              <SelectValue placeholder="Seleccione Tipo de Negocio" />
             </SelectTrigger>
             <SelectContent>
               {businessKind.map((kind) => (
@@ -250,7 +250,7 @@ const LocationForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">¿Denunció a la policía?<span className="text-red-500">*</span></label>
+          <label className="block text-sm font-medium mb-2">¿Realizó la denuncia policial?<span className="text-red-500">*</span></label>
           <Select onValueChange={setReportedToPolice} value={selectedReportedToPolice}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Seleccione" />
